@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Notes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, sans-serif;
+    background: #f4f6f8;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #studyScreen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .study-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .logo {
+    width: 40px;
+    height: 40px;
+    background: #4a6cf7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+    cursor: pointer;
+  }
+  .study-title { font-size: 20px; font-weight: 600; color: #222; }
+  .note-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .note-card h3 { font-size: 15px; color: #333; margin-bottom: 6px; }
+  .note-card p { font-size: 13px; color: #777; }
+  .subject-tag {
+    display: inline-block;
+    background: #eef1ff;
+    color: #4a6cf7;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+  #chatScreen {
+    display: none;
+    height: 100vh;
+    flex-direction: column;
+  }
+  .chat-header {
+    background: #4a6cf7;
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .back-btn { font-size: 20px; cursor: pointer; }
+  .chat-header .name { font-weight: 600; }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f4f6f8;
+  }
+  .msg {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+  .msg.me {
+    align-self: flex-end;
+    background: #4a6cf7;
+    color: white;
+    border-bottom-right-radius: 3px;
+  }
+  .msg.them {
+    align-self: flex-start;
+    background: white;
+    color: #222;
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .msg-time { font-size: 10px; opacity: 0.6; margin-top: 3px; display: block; }
+  .input-bar {
+    display: flex;
+    padding: 10px;
+    gap: 8px;
+    background: white;
+    border-top: 1px solid #eee;
+  }
+  .input-bar input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    outline: none;
+  }
+  .input-bar button {
+    background: #4a6cf7;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0 18px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #namePrompt {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  .prompt-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 300px;
+  }
+  .prompt-box p { font-size: 14px; margin-bottom: 10px; color: #333; }
+  .prompt-box input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .prompt-box button {
+    width: 100%;
+    background: #4a6cf7;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div id="studyScreen">
+  <div class="study-header">
+    <div class="logo" id="logoTrigger">S</div>
+    <div class="study-title">Study Notes</div>
+  </div>
+
+  <div class="note-card">
+    <h3>Data Structures - Chapter 4</h3>
+    <p>Binary trees, traversal methods (in-order, pre-order, post-order)</p>
+    <span class="subject-tag">CS</span>
+  </div>
+  <div class="note-card">
+    <h3>Operating Systems - Scheduling</h3>
+    <p>Round robin, priority scheduling, FCFS comparison table</p>
+    <span class="subject-tag">CS</span>
+  </div>
+  <div class="note-card">
+    <h3>Database Systems - Normalization</h3>
+    <p>1NF, 2NF, 3NF examples and practice questions</p>
+    <span class="subject-tag">CS</span>
+  </div>
+  <div class="note-card">
+    <h3>Discrete Math - Set Theory</h3>
+    <p>Venn diagrams, unions, intersections, De Morgan's laws</p>
+    <span class="subject-tag">Math</span>
+  </div>
+</div>
+
+<div id="namePrompt">
+  <div class="prompt-box">
+    <p>Enter your name to start chatting</p>
+    <input type="text" id="nameInput" placeholder="Your name">
+    <button onclick="saveName()">Continue</button>
+  </div>
+</div>
+
+<div id="chatScreen">
+  <div class="chat-header">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="name">Our Chat</div>
+  </div>
+  <div id="messages"></div>
+  <div class="input-bar">
+    <input type="text" id="msgInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  const chatRef = db.ref("chat_messages");
+
+  let myName = localStorage.getItem("chatAppName");
+  let tapCount = 0;
+  let tapTimer = null;
+
+  document.getElementById("logoTrigger").addEventListener("click", function() {
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+
+    if (tapCount >= 5) {
+      tapCount = 0;
+      openChat();
+    }
+  });
+
+  function openChat() {
+    if (!myName) {
+      document.getElementById("namePrompt").style.display = "flex";
+    } else {
+      showChatScreen();
+    }
+  }
+
+  function saveName() {
+    const val = document.getElementById("nameInput").value.trim();
+    if (!val) return;
+    myName = val;
+    localStorage.setItem("chatAppName", val);
+    document.getElementById("namePrompt").style.display = "none";
+    showChatScreen();
+  }
+
+  function showChatScreen() {
+    document.getElementById("studyScreen").style.display = "none";
+    document.getElementById("chatScreen").style.display = "flex";
+    loadMessages();
+  }
+
+  function goBack() {
+    document.getElementById("chatScreen").style.display = "none";
+    document.getElementById("studyScreen").style.display = "flex";
+  }
+
+  function sendMessage() {
+    const input = document.getElementById("msgInput");
+    const text = input.value.trim();
+    if (!text) return;
+
+    chatRef.push({
+      sender: myName,
+      text: text,
+      time: Date.now()
+    });
+
+    input.value = "";
+  }
+
+  function loadMessages() {
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.innerHTML = "";
+
+    chatRef.on("value", (snapshot) => {
+      messagesDiv.innerHTML = "";
+      const data = snapshot.val();
+      if (!data) return;
+
+      Object.values(data).forEach((msg) => {
+        const div = document.createElement("div");
+        div.className = "msg " + (msg.sender === myName ? "me" : "them");
+        const time = new Date(msg.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        div.innerHTML = msg.text + '<span class="msg-time">' + msg.sender + ' • ' + time + '</span>';
+        messagesDiv.appendChild(div);
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  }
+</script>
+
+</body>
+</html>
