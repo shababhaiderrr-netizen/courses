@@ -2,23 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Study Notes</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    width: 100%;
+  }
   body {
     font-family: -apple-system, sans-serif;
     background: #f4f6f8;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
   }
+  body.dark { background: #121212; }
+  body.dark #chatScreen { background: #121212; }
+  body.dark #messages { background: #121212; }
+  body.dark .msg.them { background: #2a2a2a; color: #eee; box-shadow: none; }
+  body.dark .input-bar { background: #1a1a1a; border-top: 1px solid #333; }
+  body.dark .input-bar input { background: #2a2a2a; color: #eee; border: 1px solid #444; }
+  body.dark .chat-header { background: #1a1a1a; }
   #studyScreen {
     height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 20px;
   }
-
   .study-header {
     display: flex;
     align-items: center;
@@ -61,7 +72,17 @@
   #chatScreen {
     display: none;
     height: 100vh;
+    height: 100dvh;
     flex-direction: column;
+  }
+  .header-icons {
+    margin-left: auto;
+    display: flex;
+    gap: 14px;
+  }
+  .header-icons span {
+    font-size: 18px;
+    cursor: pointer;
   }
   .chat-header {
     background: #4a6cf7;
@@ -116,8 +137,10 @@
     border: 1px solid #ddd;
     border-radius: 20px;
     padding: 10px 16px;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
+    background: white;
+    color: #222;
   }
   .input-bar button {
     background: #4a6cf7;
@@ -206,6 +229,10 @@
   <div class="chat-header">
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="name">Our Chat</div>
+    <div class="header-icons">
+      <span onclick="toggleDark()">🌙</span>
+      <span onclick="clearChat()">🗑️</span>
+    </div>
   </div>
   <div id="messages"></div>
   <div class="input-bar">
@@ -232,6 +259,21 @@
   let myName = localStorage.getItem("chatAppName");
   let tapCount = 0;
   let tapTimer = null;
+
+  if (localStorage.getItem("darkMode") === "on") {
+    document.body.classList.add("dark");
+  }
+
+  function toggleDark() {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("darkMode", document.body.classList.contains("dark") ? "on" : "off");
+  }
+
+  function clearChat() {
+    if (confirm("Clear all messages? This can't be undone.")) {
+      chatRef.remove();
+    }
+  }
 
   document.getElementById("logoTrigger").addEventListener("click", function() {
     tapCount++;
