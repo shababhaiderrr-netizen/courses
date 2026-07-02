@@ -74,7 +74,7 @@
     background: #4a6cf7; color: white; border: none; border-radius: 20px;
     padding: 0 18px; font-size: 14px; cursor: pointer;
   }
-  #namePrompt {
+  #namePrompt, #passPrompt {
     display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
     align-items: center; justify-content: center; z-index: 10;
   }
@@ -124,6 +124,14 @@
     <p>Enter your name to start chatting</p>
     <input type="text" id="nameInput" placeholder="Your name">
     <button onclick="saveName()">Continue</button>
+  </div>
+</div>
+
+<div id="passPrompt">
+  <div class="prompt-box">
+    <p>Enter passcode</p>
+    <input type="password" id="passInput" placeholder="Passcode">
+    <button onclick="checkPass()">Unlock</button>
   </div>
 </div>
 
@@ -189,7 +197,30 @@
     }
   });
 
+  const CHAT_PASSCODE = "Shabab18Sawaira";
+
   function openChat() {
+    if (localStorage.getItem("passOk") === "yes") {
+      afterUnlock();
+    } else {
+      document.getElementById("passPrompt").style.display = "flex";
+    }
+  }
+
+  function checkPass() {
+    const val = document.getElementById("passInput").value.trim();
+    if (val === CHAT_PASSCODE) {
+      localStorage.setItem("passOk", "yes");
+      document.getElementById("passPrompt").style.display = "none";
+      document.getElementById("passInput").value = "";
+      afterUnlock();
+    } else {
+      alert("Wrong passcode");
+      document.getElementById("passInput").value = "";
+    }
+  }
+
+  function afterUnlock() {
     if (!myName) {
       document.getElementById("namePrompt").style.display = "flex";
     } else {
