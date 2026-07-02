@@ -8,21 +8,16 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; width: 100%; }
   body {
-    font-family: -apple-system, sans-serif;
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
     background: #f4f6f8;
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
   }
-  body.dark { background: #121212; }
-  body.dark #chatScreen { background: #121212; }
-  body.dark #messages { background: #121212; }
-  body.dark .msg.them { background: #2a2a2a; color: #eee; box-shadow: none; }
-  body.dark .input-bar { background: #1a1a1a; border-top: 1px solid #333; }
-  body.dark .input-bar input { background: #2a2a2a; color: #eee; border: 1px solid #444; }
-  body.dark .chat-header { background: #1a1a1a; }
+  body.dark { background: #0b0b12; }
   #studyScreen {
     height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -47,53 +42,127 @@
     display: inline-block; background: #eef1ff; color: #4a6cf7;
     font-size: 11px; padding: 3px 8px; border-radius: 6px; margin-top: 6px;
   }
-  #chatScreen { display: none; height: 100vh; height: 100dvh; flex-direction: column; }
-  .header-icons { margin-left: auto; display: flex; gap: 14px; }
-  .header-icons span { font-size: 18px; cursor: pointer; }
-  .chat-header {
-    background: #4a6cf7; color: white; padding: 14px 16px;
-    display: flex; align-items: center; gap: 10px;
+  #chatScreen {
+    display: none;
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    background: linear-gradient(180deg, #eef1fb 0%, #f7f8fc 100%);
   }
-  .back-btn { font-size: 20px; cursor: pointer; }
-  .chat-header .name { font-weight: 600; }
+  body.dark #chatScreen {
+    background: linear-gradient(180deg, #0b0b12 0%, #121220 100%);
+  }
+  .chat-header {
+    background: linear-gradient(120deg, #5b4bf5, #8a3ffc);
+    color: white;
+    padding: 16px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(90,60,240,0.25);
+    position: relative;
+    z-index: 2;
+  }
+  .back-btn { font-size: 20px; cursor: pointer; opacity: 0.9; }
+  .avatar-circle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+  }
+  .header-text { display: flex; flex-direction: column; }
+  .chat-header .name { font-weight: 700; font-size: 16px; }
+  .status-line { font-size: 11px; opacity: 0.85; }
+  .status-line.online::before {
+    content: "";
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #4ade80;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  .header-icons { margin-left: auto; display: flex; gap: 16px; }
+  .header-icons span { font-size: 18px; cursor: pointer; opacity: 0.95; }
   #messages {
-    flex: 1; overflow-y: auto; padding: 14px;
-    display: flex; flex-direction: column; gap: 8px;
-    background: #f4f6f8;
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 14px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
   .msg {
-    max-width: 75%; padding: 8px 12px; border-radius: 14px;
-    font-size: 14px; line-height: 1.3; word-wrap: break-word;
-    animation: popIn 0.2s ease;
+    max-width: 76%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 14.5px;
+    line-height: 1.35;
+    word-wrap: break-word;
+    animation: popIn 0.25s cubic-bezier(.2,.8,.3,1);
+    position: relative;
   }
   @keyframes popIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(10px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .msg.me {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #6a5bf9, #9b4dfc);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 3px 10px rgba(110,80,250,0.3);
+  }
+  .msg.them {
+    align-self: flex-start;
+    background: white;
+    color: #222;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  body.dark .msg.them {
+    background: #1c1c28;
+    color: #f0f0f5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .msg-time {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
   }
   .day-sep {
     align-self: center;
-    background: rgba(0,0,0,0.08);
-    color: #555;
+    background: rgba(120,100,255,0.12);
+    color: #6a5bf9;
     font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 10px;
-    margin: 6px 0;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin: 10px 0;
   }
-  body.dark .day-sep { background: rgba(255,255,255,0.1); color: #ccc; }
-  .tick { font-size: 11px; margin-left: 4px; }
-  .tick.seen { color: #4fc3f7; }
+  body.dark .day-sep { background: rgba(150,120,255,0.15); color: #b3a1ff; }
+  .tick { font-size: 12px; margin-left: 2px; }
+  .tick.seen { color: #7ee0ff; }
   .typing-indicator {
     display: none;
     align-self: flex-start;
     background: white;
-    padding: 8px 12px;
-    border-radius: 14px;
+    padding: 10px 14px;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
     gap: 4px;
+    margin: 0 14px 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    width: fit-content;
   }
-  body.dark .typing-indicator { background: #2a2a2a; }
+  body.dark .typing-indicator { background: #1c1c28; }
   .typing-indicator span {
     width: 6px; height: 6px;
-    background: #999;
+    background: #9b4dfc;
     border-radius: 50%;
     display: inline-block;
     margin-right: 3px;
@@ -105,31 +174,77 @@
     0%, 60%, 100% { transform: translateY(0); }
     30% { transform: translateY(-5px); }
   }
-  .msg.me { align-self: flex-end; background: #4a6cf7; color: white; border-bottom-right-radius: 3px; }
-  .msg.them { align-self: flex-start; background: white; color: #222; border-bottom-left-radius: 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-  .msg-time { font-size: 10px; opacity: 0.6; margin-top: 3px; display: block; }
-  .input-bar { display: flex; padding: 10px; gap: 8px; background: white; border-top: 1px solid #eee; }
+  .input-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    gap: 8px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  body.dark .input-bar {
+    background: rgba(18,18,30,0.85);
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
   .input-bar input {
-    flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 10px 16px;
-    font-size: 16px; outline: none; background: white; color: #222;
+    flex: 1;
+    border: none;
+    border-radius: 24px;
+    padding: 12px 18px;
+    font-size: 16px;
+    outline: none;
+    background: #f0f1f7;
+    color: #222;
   }
-  .input-bar button {
-    background: #4a6cf7; color: white; border: none; border-radius: 20px;
-    padding: 0 18px; font-size: 14px; cursor: pointer;
+  body.dark .input-bar input { background: #1c1c28; color: #f0f0f5; }
+  .send-btn {
+    background: linear-gradient(135deg, #6a5bf9, #9b4dfc);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 10px rgba(110,80,250,0.35);
+    transition: transform 0.1s ease;
+    flex-shrink: 0;
   }
+  .send-btn:active { transform: scale(0.9); }
   #namePrompt, #passPrompt {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-    align-items: center; justify-content: center; z-index: 10;
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,10,35,0.55);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
   }
-  .prompt-box { background: white; padding: 20px; border-radius: 12px; width: 80%; max-width: 300px; }
-  .prompt-box p { font-size: 14px; margin-bottom: 10px; color: #333; }
+  .prompt-box {
+    background: white;
+    padding: 24px;
+    border-radius: 18px;
+    width: 82%;
+    max-width: 300px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    animation: popIn 0.25s ease;
+  }
+  body.dark .prompt-box { background: #1c1c28; }
+  .prompt-box p { font-size: 15px; margin-bottom: 12px; color: #333; font-weight: 600; }
+  body.dark .prompt-box p { color: #f0f0f5; }
   .prompt-box input {
-    width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px;
-    margin-bottom: 10px; font-size: 14px;
+    width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px;
+    margin-bottom: 12px; font-size: 15px; outline: none;
   }
+  body.dark .prompt-box input { background: #12121c; border: 1px solid #333; color: #f0f0f5; }
   .prompt-box button {
-    width: 100%; background: #4a6cf7; color: white; border: none;
-    padding: 10px; border-radius: 8px; font-size: 14px;
+    width: 100%;
+    background: linear-gradient(135deg, #6a5bf9, #9b4dfc);
+    color: white; border: none;
+    padding: 11px; border-radius: 10px; font-size: 15px; font-weight: 600;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -181,7 +296,11 @@
 <div id="chatScreen">
   <div class="chat-header">
     <div class="back-btn" onclick="goBack()">←</div>
-    <div class="name">Our Chat</div>
+    <div class="avatar-circle" id="avatarInitial">?</div>
+    <div class="header-text">
+      <div class="name">Our Chat</div>
+      <div class="status-line online">Active now</div>
+    </div>
     <div class="header-icons">
       <span onclick="toggleDark()">🌙</span>
       <span onclick="clearChat()">🗑️</span>
@@ -191,7 +310,7 @@
   <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
   <div class="input-bar">
     <input type="text" id="msgInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendMessage()" oninput="handleTyping()">
-    <button onclick="sendMessage()">Send</button>
+    <button class="send-btn" onclick="sendMessage()">➤</button>
   </div>
 </div>
 
@@ -280,6 +399,7 @@
   function showChatScreen() {
     document.getElementById("studyScreen").style.display = "none";
     document.getElementById("chatScreen").style.display = "flex";
+    document.getElementById("avatarInitial").textContent = myName ? myName.charAt(0).toUpperCase() : "?";
     loadMessages();
   }
 
