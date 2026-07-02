@@ -200,17 +200,12 @@
   const CHAT_PASSCODE = "Shabab18Sawaira";
 
   function openChat() {
-    if (localStorage.getItem("passOk") === "yes") {
-      afterUnlock();
-    } else {
-      document.getElementById("passPrompt").style.display = "flex";
-    }
+    document.getElementById("passPrompt").style.display = "flex";
   }
 
   function checkPass() {
     const val = document.getElementById("passInput").value.trim();
     if (val === CHAT_PASSCODE) {
-      localStorage.setItem("passOk", "yes");
       document.getElementById("passPrompt").style.display = "none";
       document.getElementById("passInput").value = "";
       afterUnlock();
@@ -246,6 +241,7 @@
   function goBack() {
     document.getElementById("chatScreen").style.display = "none";
     document.getElementById("studyScreen").style.display = "flex";
+    chatRef.off();
   }
 
   function sendMessage() {
